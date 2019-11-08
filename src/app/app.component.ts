@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AppareilService } from './services/appareil.service';
+
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+
+export class AppComponent implements OnInit{
   isAuth = false;
 
   lastUpdate = new Promise(
@@ -17,33 +20,11 @@ export class AppComponent {
   				}, 2000
   			);
   		}
-  	);
+  )
 
-  appareils = [
-  	{
-  		name: "TV LG HD 24 Pouces",
-  		status: "allumé"
-  	},
-  	{
-  		name: "Ordinateur portable PB",
-  		status: "allumé"
-  	},
-  	{
-  		name: "Samsung Smartphone Android",
-  		status: "éteint"
-  	},
-  	{
-  		name: "Itel phone",
-  		status: "allumé"
-  	},
-  ];
+  appareils: any[];
 
-  /*app1 = "TV LG HD 24 Pouces";
-  app2 = "Ordinateur portable PB";
-  app3 = "Samsung Smartphone Android";
-  app4 = "Itel phone";*/
-
-  constructor(){
+  constructor(private appareilService: AppareilService){
   	setTimeout(
   			()=>{
   				this.isAuth=true;
@@ -51,7 +32,15 @@ export class AppComponent {
   	);
   }
 
+  ngOnInit(){
+  	this.appareils = this.appareilService.appareils;
+  }
+
   onAllumer(){
-  	confirm("On allume tout");
+  	this.appareilService.switchOnAll();
+  }
+
+   onEteindre(){
+    this.appareilService.switchOffAll();
   }
 }
